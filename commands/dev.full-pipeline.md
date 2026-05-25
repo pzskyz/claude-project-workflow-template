@@ -6,9 +6,6 @@ description: Orchestrate complete workflow from analyze to finalize
 
 Execute complete development workflow: analyze → implement → verify → finalize.
 
-<!-- IMPORTANT: Replace {{PLACEHOLDERS}} with actual project commands. -->
-<!-- If a placeholder is not replaced, do not execute it. Inspect project files to find the correct command. If no command can be found, mark it as UNKNOWN and ask the user. -->
-
 ## Workflow Overview
 
 ```
@@ -30,9 +27,10 @@ Execute complete development workflow: analyze → implement → verify → fina
 ### Actions
 
 1. **Read CLAUDE.md** (if exists)
-   ```bash
-   cat CLAUDE.md 2>/dev/null || echo "No CLAUDE.md found"
-   ```
+   - Project Overview
+   - Tech Stack
+   - Project Commands
+   - Coding rules
 
 2. **Explore codebase**
    ```bash
@@ -98,13 +96,14 @@ Execute complete development workflow: analyze → implement → verify → fina
    ```
 
 2. **Implement changes**
-   - Follow existing patterns
+   - Follow existing patterns (from CLAUDE.md)
    - Keep changes surgical
    - Add comments if needed
 
 3. **Update/create tests**
    ```bash
    # Run test to confirm test written correctly
+   # Read command from CLAUDE.md → Project Commands
    {{TEST_COMMAND}}
    ```
 
@@ -124,10 +123,13 @@ Execute complete development workflow: analyze → implement → verify → fina
 
 1. **Run verification at appropriate level**
 
+   Read commands from `CLAUDE.md` → `Project Commands`:
+
    **Level 1 (Surgical):**
    ```bash
-   {{TEST_COMMAND}}
+   {{TARGETED_TEST_COMMAND}}
    {{LINT_COMMAND}}
+   {{TYPECHECK_COMMAND}}
    ```
 
    **Level 2 (Feature):**
@@ -204,15 +206,12 @@ Execute complete development workflow: analyze → implement → verify → fina
    - Patterns discovered
    - Lessons learned
 
-## Customization markers
+## Rules
 
-<!-- CUSTOMIZE: Update commands for project -->
-
-Placeholders to replace:
-- `{{TEST_COMMAND}}` - Test runner command
-- `{{BUILD_COMMAND}}` - Build command
-- `{{LINT_COMMAND}}` - Lint command
-- `{{E2E_COMMAND}}` - E2E command
+- **Never execute literal placeholders** like `{{TEST_COMMAND}}`
+- Always read commands from `CLAUDE.md` first
+- If command is unknown, inspect project files or ask user
+- Follow coding rules from `CLAUDE.md`
 
 ## Flags
 

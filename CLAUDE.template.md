@@ -15,7 +15,9 @@
 - **Database**: {{DATABASE}} ({{VERSION}})
 - **Other Key Libraries**: {{KEY_LIBS}}
 
-## Standard Commands
+## Project Commands
+
+Use these commands as the source of truth. Commands in `.claude/commands/` read from this section.
 
 ### Setup
 
@@ -23,7 +25,7 @@
 {{INSTALL_COMMAND}}
 ```
 
-### Run Development
+### Development Server
 
 ```bash
 {{START_COMMAND}}
@@ -35,23 +37,43 @@
 {{TEST_COMMAND}}
 ```
 
+### Targeted Test
+
+```bash
+{{TARGETED_TEST_COMMAND}}
+```
+<!-- Example: npm test -- --testPathPattern=auth -->
+
 ### Build
 
 ```bash
 {{BUILD_COMMAND}}
 ```
 
-### Lint / Typecheck
+### Lint
 
 ```bash
 {{LINT_COMMAND}}
 ```
 
-### E2E Tests
+### Typecheck
+
+```bash
+{{TYPECHECK_COMMAND}}
+```
+
+### E2E
 
 ```bash
 {{E2E_COMMAND}}
 ```
+
+### E2E Report
+
+```bash
+{{E2E_REPORT_COMMAND}}
+```
+<!-- Example: npx playwright show-report -->
 
 ## Team Review Protocol
 

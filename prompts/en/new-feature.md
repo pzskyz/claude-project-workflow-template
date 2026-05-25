@@ -24,7 +24,7 @@ $ARGUMENTS
 
 ### Phase 2: Survey code
 
-- [ ] Read CLAUDE.md to understand project structure
+- [ ] Read `CLAUDE.md` to understand project structure
 - [ ] Find similar features
 - [ ] Trace through existing code
 - [ ] Identify 5-10 key files to read
@@ -47,14 +47,14 @@ $ARGUMENTS
 
 - [ ] Read identified files
 - [ ] Implement according to chosen architecture
-- [ ] Write tests
+- [ ] Write tests (read test command from `CLAUDE.md` → `Project Commands`)
 - [ ] Run verification pipeline
 
 ### Phase 6: Verify
 
-- [ ] Run tests
-- [ ] Run build
-- [ ] Run lint/typecheck
+- [ ] Run tests (from `CLAUDE.md`)
+- [ ] Run build (from `CLAUDE.md`)
+- [ ] Run lint/typecheck (from `CLAUDE.md`)
 - [ ] Generate verification report
 
 ## Final Output
@@ -70,7 +70,7 @@ $ARGUMENTS
 - [file 2]
 
 ### Tests run
-- [test command]
+[test command from CLAUDE.md]
 
 ### Build status
 [pass/fail]
@@ -88,3 +88,4 @@ $ARGUMENTS
 - Don't "improve" unrelated code
 - Match existing patterns in codebase
 - If ambiguous → ask user before guessing
+- Use commands from `CLAUDE.md` → `Project Commands` section

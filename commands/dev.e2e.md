@@ -6,9 +6,6 @@ description: Run E2E tests or manual user flow verification
 
 Run end-to-end tests or verify manual user flows.
 
-<!-- IMPORTANT: Replace {{PLACEHOLDERS}} with actual project commands. -->
-<!-- If a placeholder is not replaced, do not execute it. Inspect project files to find the correct command. If no command can be found, mark it as UNKNOWN and ask the user. -->
-
 ## When to use
 
 - **Level 3 verification**: Cross-system, user-facing changes
@@ -18,92 +15,65 @@ Run end-to-end tests or verify manual user flows.
 
 ## Process
 
-### Step 1: Identify E2E command
+### Step 1: Read E2E command from CLAUDE.md
+
+From `CLAUDE.md` → `Project Commands` → E2E section:
+```bash
+{{E2E_COMMAND}}
+```
+
+If not defined, inspect project files:
+- `package.json` (scripts with "e2e", "test:e2e")
+- `playwright.config.ts`, `cypress.config.ts`
+- `README.md` (e2e instructions)
+
+### Step 2: Run E2E tests
 
 ```bash
-<!-- CUSTOMIZE: Replace with project E2E command -->
+# Run all E2E tests
 {{E2E_COMMAND}}
 
-# Or run specific test file
-<!-- Example: npx playwright test tests/checkout.spec.ts -->
+# Run specific test file (if applicable)
+# {{E2E_COMMAND}} --spec path/to/test.spec.ts
 ```
 
-### Step 2: Or verify manually
-
-If no E2E framework exists, verify manually:
-
-1. **Identify flow to test**
-2. **Check related endpoints**
-3. **Test with curl/httpie**
-4. **Verify response format**
-
-### Step 3: Check critical paths
+### Step 3: View E2E report (if available)
 
 ```bash
-# Check auth flow
-curl -X POST /api/login -d '{"email":"test@test.com"}'
-# Expected: 200 + token
-
-# Check data flow
-curl /api/users/1
-# Expected: user object
-
-# Check error handling
-curl /api/users/999
-# Expected: 404 + error message
+# Show E2E report if command exists
+{{E2E_REPORT_COMMAND}}
 ```
 
-## Common E2E frameworks
+## Common E2E Frameworks
 
 ### Playwright
-
 ```bash
-# Run all tests
 npx playwright test
-
-# Run specific test
-npx playwright test tests/checkout.spec.ts
-
-# Run with UI
-npx playwright test --ui
-
-# Run headed (see browser)
-npx playwright test --headed
-
-# Run with trace
-npx playwright test --trace on
+npx playwright test --ui           # With UI
+npx playwright test --headed       # See browser
+npx playwright test --trace on    # With trace
 ```
 
 ### Cypress
-
 ```bash
-# Run all tests
 npm run cypress:run
-
-# Run specific test
-npx cypress run --spec "cypress/e2e/checkout.cy.js"
-
-# Open Cypress UI
-npm run cypress:open
+npm run cypress:open              # Open UI
 ```
 
 ### Jest + Supertest (API)
-
 ```bash
-# Run E2E tests
 npm run test:e2e
-# or
 npx jest tests/e2e
 ```
 
 ### pytest (Python)
-
 ```bash
-# Run E2E tests
 pytest tests/e2e/ -v
 ```
 
-## Manual verification checklist
+## Manual Verification
+
+If no E2E framework exists, verify critical paths manually:
 
 ### Auth Flow
 - [ ] Login with valid credentials → success
@@ -112,11 +82,12 @@ pytest tests/e2e/ -v
 - [ ] Token expiration → redirect to login
 
 ### API Flow
-- [ ] GET request → correct data
-- [ ] POST request → data created
-- [ ] PUT/PATCH → data updated
-- [ ] DELETE → data removed
-- [ ] Invalid input → proper error
+```bash
+# Test endpoints with curl
+curl -X POST /api/login -d '{"email":"test@test.com"}'
+curl /api/users/1
+curl /api/users/999  # expect 404
+```
 
 ### UI Flow (if applicable)
 - [ ] Navigation between pages
@@ -146,18 +117,16 @@ pytest tests/e2e/ -v
 - [ready / needs fixes / manual intervention required]
 ```
 
+## Rules
+
+- **Never execute literal placeholders** like `{{E2E_COMMAND}}`
+- Always read from `CLAUDE.md` first
+- If E2E command is unknown, inspect project files
+- If still unknown, mark as `UNKNOWN` and ask user
+- Note if no E2E framework exists (skip gracefully)
+
 ## When to skip E2E
 
 - No E2E framework → note and skip
-- Backend-only change doesn't affect user flows → skip
+- Backend-only change that doesn't affect user flows → skip
 - Time constraints → note and skip with reason
-
-## Customization markers
-
-<!-- CUSTOMIZE: Update E2E command for project -->
-
-Placeholders to replace:
-- `{{E2E_COMMAND}}` - E2E test runner command
-  - Example: `npx playwright test`
-  - Example: `npm run cypress:run`
-  - Example: `pytest tests/e2e -v`

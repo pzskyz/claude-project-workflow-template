@@ -6,9 +6,6 @@ description: Finalize - check diff, docs, save memory
 
 Complete development session with final checks.
 
-<!-- IMPORTANT: Replace {{PLACEHOLDERS}} with actual project commands. -->
-<!-- If a placeholder is not replaced, do not execute it. Inspect project files to find the correct command. If no command can be found, mark it as UNKNOWN and ask the user. -->
-
 ## Checklist
 
 ### 1. Diff Review
@@ -28,6 +25,8 @@ git diff
 - [ ] No extra commented-out code
 
 ### 2. Test Coverage
+
+Read test command from `CLAUDE.md` → `Project Commands`:
 
 ```bash
 # Run tests to confirm
@@ -49,6 +48,8 @@ git diff
 
 ### 4. Build Verification
 
+Read build command from `CLAUDE.md` → `Project Commands`:
+
 ```bash
 # Build to confirm no issues
 {{BUILD_COMMAND}}
@@ -60,11 +61,7 @@ git diff
 
 ### 5. Memory Update
 
-```bash
-# Save insights to memory system
-```
-
-**Save if:**
+Save insights to memory system if:
 - Important architecture decisions
 - New patterns discovered
 - Gotchas or caveats
@@ -102,17 +99,15 @@ git diff
 [Ready to merge / Needs manual review / Blocked]
 ```
 
-## When manual review is needed
+## Rules
+
+- **Never execute literal placeholders** like `{{TEST_COMMAND}}`
+- Always read commands from `CLAUDE.md` first
+- If command is unknown, inspect project files or ask user
+
+## When Manual Review is Needed
 
 - High-risk changes (auth, payment, database)
 - Breaking changes
 - Large refactors
 - Security-sensitive code
-
-## Customization markers
-
-<!-- CUSTOMIZE: Update commands for project -->
-
-Placeholders to replace:
-- `{{TEST_COMMAND}}` - Test runner command
-- `{{BUILD_COMMAND}}` - Build command

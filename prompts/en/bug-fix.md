@@ -19,21 +19,14 @@ $ARGUMENTS
 - [ ] Confirm bug:
   - **Actual behavior**: [paste description]
   - **Expected behavior**: [paste expected]
-- [ ] Reproduce if possible:
-  ```bash
-  # Run command that causes bug
-  [command]
-  ```
+- [ ] Reproduce if possible
 - [ ] Collect logs, error messages, screenshots if any
 
 ### Phase 2: Trace flow
 
-- [ ] Read CLAUDE.md
+- [ ] Read `CLAUDE.md` for project context
 - [ ] Find entry point of buggy flow
-- [ ] Trace through files:
-  ```bash
-  grep -rn "FUNCTION_NAME" --include="*.ts" --include="*.py"
-  ```
+- [ ] Trace through files
 - [ ] Identify root cause hypothesis
 
 ### Phase 3: Analyze
@@ -87,22 +80,12 @@ $ARGUMENTS
 ### Phase 5: Verify
 
 - [ ] Reproduce bug → confirm fixed
-- [ ] Run tests:
-  ```bash
-  {{TEST_COMMAND}}
-  ```
-- [ ] Run lint/build if needed:
-  ```bash
-  {{LINT_COMMAND}}
-  {{BUILD_COMMAND}}
-  ```
+- [ ] Run tests (from `CLAUDE.md` → `Project Commands`)
+- [ ] Run lint/build if needed
 
 ### Phase 6: Finalize
 
-- [ ] Review diff:
-  ```bash
-  git diff
-  ```
+- [ ] Review diff
 - [ ] Ensure only necessary changes
 - [ ] Generate verification report
 
@@ -146,3 +129,4 @@ $ARGUMENTS
 - If cannot reproduce → ask user for more context
 - Fix must cover edge cases, not just happy path
 - After fix → confirm bug is gone
+- Use commands from `CLAUDE.md` → `Project Commands` section

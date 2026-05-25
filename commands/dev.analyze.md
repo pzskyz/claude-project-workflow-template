@@ -16,11 +16,15 @@ Analyze the codebase to understand structure, patterns, and relationships. No co
 
 ## Process
 
-### Step 1: Read CLAUDE.md (if exists)
+### Step 1: Read CLAUDE.md
 
-```bash
-cat CLAUDE.md 2>/dev/null || echo "No CLAUDE.md found"
-```
+Read `CLAUDE.md` to understand project configuration:
+- Project Overview
+- Tech Stack
+- Project Commands
+- Coding rules
+
+If `CLAUDE.md` does not exist, explore manually.
 
 ### Step 2: Explore structure
 
@@ -30,18 +34,17 @@ ls -la
 tree -L 2 -I node_modules 2>/dev/null || find . -maxdepth 2 -type d | head -20
 
 # Find key files
-find . -maxdepth 3 -name "*.md" -o -name "*.json" | grep -E "(package|README|tsconfig)" | head -10
+find . -maxdepth 3 \( -name "*.md" -o -name "*.json" \) | grep -E "(package|README|tsconfig)" | head -10
 ```
 
 ### Step 3: Identify tech stack
 
 ```bash
-# Check package manager
+# Check package manager and framework
 ls package.json pyproject.toml Cargo.toml go.mod composer.json 2>/dev/null
 
-# Check framework
-grep -r "from " --include="*.py" | head -5 2>/dev/null
-grep -r "import " --include="*.ts" | head -5 2>/dev/null
+# Read CLAUDE.md for tech stack
+grep -A5 "Tech Stack" CLAUDE.md 2>/dev/null || echo "CLAUDE.md not found"
 ```
 
 ### Step 4: Find key files
@@ -54,7 +57,7 @@ find . -maxdepth 3 \( -name "main.py" -o -name "index.ts" -o -name "app.ts" -o -
 find . -maxdepth 3 \( -name "routes*" -o -name "controllers*" -o -name "pages*" \) -type d 2>/dev/null
 
 # Find test files
-find . -maxdepth 3 -name "*.test.*" -o -name "*_test.py" 2>/dev/null | head -10
+find . -maxdepth 3 \( -name "*.test.*" -o -name "*_test.py" -o -name "*.spec.*" \) 2>/dev/null | head -10
 ```
 
 ### Step 5: Analyze patterns
@@ -68,30 +71,30 @@ find . -maxdepth 3 -name "*.test.*" -o -name "*_test.py" 2>/dev/null | head -10
 
 Provide a report with:
 
-1. **Project Overview**
-   - Project name, purpose
-   - Tech stack
-   - Architecture pattern
+### 1. Project Overview
+- Project name, purpose
+- Tech stack (from CLAUDE.md)
+- Architecture pattern
 
-2. **Directory Structure**
-   - Main directories and their purposes
-   - Entry points
+### 2. Directory Structure
+- Main directories and their purposes
+- Entry points
 
-3. **Key Files** (5-10 files)
-   - File name
-   - Purpose
-   - Relationships to other files
+### 3. Key Files (5-10 files)
+- File name
+- Purpose
+- Relationships to other files
 
-4. **Patterns and Conventions**
-   - Coding style
-   - Naming conventions
-   - Testing approach
-   - Error handling pattern
+### 4. Patterns and Conventions
+- Coding style
+- Naming conventions
+- Testing approach
+- Error handling pattern
 
-5. **Recommendations**
-   - Approach for specific task
-   - Files to read first
-   - Cautions (code needing care)
+### 5. Recommendations
+- Approach for specific task
+- Files to read first
+- Cautions (code needing care)
 
 ## Example Output
 
@@ -121,9 +124,10 @@ Provide a report with:
 - Test API routes with mock headers
 ```
 
-## Notes
+## Rules
 
 - Analyze only, DO NOT modify code
 - If ambiguous cases arise, ask the user
 - Provide concrete file paths, not vague descriptions
-- If project has its own CLAUDE.md, read it first
+- Read `CLAUDE.md` first when available
+- If CLAUDE.md has wrong/missing info, note it in output

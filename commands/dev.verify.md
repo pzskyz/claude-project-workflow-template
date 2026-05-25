@@ -6,51 +6,52 @@ description: Run verification - test, build, lint based on change scope
 
 Run the verification pipeline appropriate for the scope and risk of the current changes.
 
-<!-- IMPORTANT: Replace {{PLACEHOLDERS}} with actual project commands. -->
-<!-- If a placeholder is not replaced, do not execute it. Inspect project files to find the correct command. If no command can be found, mark it as UNKNOWN and ask the user. -->
-
 ## Principles
 
 - Verification level must match change scope
 - Don't run too many or too few checks
 - Report results clearly
+- Use commands from `CLAUDE.md` → `Project Commands` section
 
 ## Process
 
-### Step 1: Identify changes
+### Step 1: Read project commands
+
+From `CLAUDE.md`, extract the `Project Commands` section:
+- Test command
+- Build command
+- Lint command
+- Typecheck command
+- E2E command
+
+### Step 2: Identify changes
 
 ```bash
 git status --short
 git diff --name-only
 ```
 
-### Step 2: Determine verification level
+### Step 3: Determine verification level
 
 | Level | When | Required Checks |
 |-------|------|-----------------|
 | 0 | Docs/config only | Check formatting |
-| 1 | Single bug fix, small function | Unit tests + lint |
-| 2 | Feature, behavior change | Tests + build |
+| 1 | Single bug fix, small function | Targeted test + lint/typecheck |
+| 2 | Feature, behavior change | Tests + build + lint/typecheck |
 | 3 | Cross-system, user-facing | Tests + build + E2E |
 
-### Step 3: Run checks by level
+### Step 4: Run checks by level
 
 #### Level 0: Docs/Config only
 
-```bash
-# Check formatting
-<!-- CUSTOMIZE: Replace with appropriate command -->
-<!-- Examples: npx prettier --check . -->
-<!-- Examples: markdownlint *.md -->
-```
+- Review changed files for formatting
+- No command execution required
 
 #### Level 1: Surgical code change
 
 ```bash
-<!-- CUSTOMIZE: Replace with project commands -->
-
-# Run targeted tests
-{{TEST_COMMAND}}
+# Run targeted tests (use targeted test command from CLAUDE.md)
+{{TARGETED_TEST_COMMAND}}
 
 # Run linting
 {{LINT_COMMAND}}
@@ -62,8 +63,6 @@ git diff --name-only
 #### Level 2: Feature/behavior change
 
 ```bash
-<!-- CUSTOMIZE: Replace with project commands -->
-
 # Run tests
 {{TEST_COMMAND}}
 
@@ -77,9 +76,7 @@ git diff --name-only
 #### Level 3: Cross-system flow
 
 ```bash
-<!-- CUSTOMIZE: Replace with project commands -->
-
-# Run all tests
+# Run tests
 {{TEST_COMMAND}}
 
 # Run build
@@ -131,45 +128,23 @@ fi
 - **Recommendation**: [ready/needs-fixes]
 ```
 
-## Examples for common stacks
+## Finding Commands
 
-### Next.js
+If `CLAUDE.md` does not have the required command:
 
-```bash
-npm run lint
-npm run typecheck
-npm test
-npm run build
-npx playwright test  # for E2E
-```
+1. Inspect project files:
+   - `package.json` (scripts section)
+   - `pyproject.toml` (test configuration)
+   - `Makefile` (targets)
+   - `README.md` (setup instructions)
+   - `.github/workflows/*.yml` (CI commands)
 
-### Python/FastAPI
+2. For monorepos, identify affected packages:
+   ```bash
+   PACKAGE=$(echo $CHANGED_FILES | grep -oE "packages/[^/]+" | head -1)
+   ```
 
-```bash
-pytest
-ruff check .
-mypy .
-pytest tests/e2e/ -v
-```
-
-### Go
-
-```bash
-go test ./...
-go build ./...
-golangci-lint run
-```
-
-### Monorepo
-
-```bash
-# Detect affected packages
-PACKAGE=$(echo $CHANGED_FILES | grep -oE "packages/[^/]+" | head -1)
-
-# Run tests for affected package
-pnpm --filter $PACKAGE test
-pnpm --filter $PACKAGE build
-```
+3. If command is still unknown, mark it as `UNKNOWN` and ask the user.
 
 ## When to skip checks
 
@@ -178,13 +153,9 @@ pnpm --filter $PACKAGE build
 - Tests already run (CI) → note and skip
 - Urgent hotfix → note and proceed
 
-## Customization markers
+## Rules
 
-<!-- CUSTOMIZE: Update commands below for your project -->
-
-Placeholders to replace:
-- `{{TEST_COMMAND}}` - Test runner command
-- `{{BUILD_COMMAND}}` - Build command
-- `{{LINT_COMMAND}}` - Lint command
-- `{{TYPECHECK_COMMAND}}` - Typecheck command (optional)
-- `{{E2E_COMMAND}}` - E2E command (optional)
+- **Never execute literal placeholders** like `{{TEST_COMMAND}}`
+- Always read commands from `CLAUDE.md` first
+- If required command is missing, ask the user
+- Prefer explicit commands over heuristics

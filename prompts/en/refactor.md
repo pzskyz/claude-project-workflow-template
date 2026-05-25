@@ -26,12 +26,8 @@ $ARGUMENTS
 
 ### Phase 2: Understand current behavior
 
-- [ ] Read CLAUDE.md
-- [ ] Trace current flow:
-  ```bash
-  # Find related files
-  grep -rn "TARGET" --include="*.ts" --include="*.py"
-  ```
+- [ ] Read `CLAUDE.md` for project context
+- [ ] Trace current flow
 - [ ] Identify public API contract to preserve:
   - Function signatures
   - Return values
@@ -84,26 +80,13 @@ $ARGUMENTS
 
 ### Phase 5: Verify
 
-- [ ] Run all tests:
-  ```bash
-  {{TEST_COMMAND}}
-  ```
-- [ ] Verify behavior unchanged:
-  ```bash
-  # Manual test edge cases
-  ```
-- [ ] Run lint/build:
-  ```bash
-  {{LINT_COMMAND}}
-  {{BUILD_COMMAND}}
-  ```
+- [ ] Run all tests (from `CLAUDE.md` → `Project Commands`)
+- [ ] Verify behavior unchanged
+- [ ] Run lint/build
 
 ### Phase 6: Finalize
 
-- [ ] Review diff:
-  ```bash
-  git diff
-  ```
+- [ ] Review diff
 - [ ] Ensure:
   - Public API unchanged
   - Tests still pass
@@ -170,3 +153,4 @@ $ARGUMENTS
 - **Secondary goal**: improve code quality
 - If goals conflict → prioritize preserving behavior
 - If complex refactor → split into multiple smaller PRs
+- Use commands from `CLAUDE.md` → `Project Commands` section
