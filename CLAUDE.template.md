@@ -32,7 +32,7 @@ If a command is not available, write `UNKNOWN` and explain why. Do not invent co
 | Typecheck     | `{{TYPECHECK_COMMAND}}`     | Type checking, if applicable      |
 | Format check  | `{{FORMAT_CHECK_COMMAND}}`  | Formatting check, if applicable   |
 | E2E           | `{{E2E_COMMAND}}`           | End-to-end tests, if available    |
-| E2E report    | `{{E2E_REPORT_COMMAND}}`    | Show E2E report, if available     |
+| E2E report    | `{{E2E_REPORT_COMMAND}}`     | Show E2E report, if available     |
 
 ## Command Resolution Rules
 
@@ -49,6 +49,60 @@ When executing slash commands:
    - CI config (`.github/workflows/*.yml`)
    - Docker config
 5. If still unknown, ask the user before running that check.
+
+## Core Engineering Rules
+
+These rules reduce common LLM coding mistakes. They bias toward caution over speed. For trivial tasks, use judgment.
+
+### Think Before Coding
+
+Do not assume. Do not hide confusion. Surface tradeoffs.
+
+Before implementing:
+
+- State assumptions explicitly.
+- If multiple interpretations exist, present them instead of silently choosing one.
+- If a simpler approach exists, say so.
+- Push back when the requested solution seems overcomplicated or risky.
+- If something is unclear, stop, name the confusion, and ask.
+
+### Simplicity First
+
+Implement the minimum code that solves the problem.
+
+- Do not add features beyond what was asked.
+- Do not introduce abstractions for single-use code.
+- Do not add flexibility or configurability that was not requested.
+- Avoid speculative error handling for impossible scenarios.
+- If a solution is much longer than necessary, simplify it.
+
+### Surgical Changes
+
+Touch only what is required.
+
+- Do not improve adjacent code, comments, or formatting.
+- Do not refactor unrelated code.
+- Match existing style, even if you would normally do it differently.
+- If you notice unrelated dead code, mention it instead of deleting it.
+- Remove only imports, variables, or functions made unused by your own changes.
+
+Every changed line must trace directly to the user's request.
+
+### Goal-Driven Execution
+
+Define success criteria and loop until verified.
+
+- "Add validation" → write tests for invalid inputs, then make them pass.
+- "Fix a bug" → write or identify a failing test that reproduces it, then make it pass.
+- "Refactor X" → ensure behavior is covered before and after.
+
+For multi-step tasks, state a brief plan:
+
+```
+1. [Step] → verify: [check]
+2. [Step] → verify: [check]
+3. [Step] → verify: [check]
+```
 
 ## Team Review Protocol
 
@@ -105,39 +159,6 @@ Every source-code change must end with a verification report.
 - **Risks/skipped checks**: [any concerns]
 - **Recommendation**: [ready to merge / needs fixes]
 ```
-
-## Coding Rules
-
-### 1. Think Before Coding
-- State assumptions explicitly
-- Present multiple interpretations if ambiguous
-- Ask questions early
-
-### 2. Simplicity First
-- No speculative features
-- No premature abstractions
-- 200 lines that could be 50? Rewrite.
-
-### 3. Surgical Changes
-- Touch only what you must
-- Don't "improve" adjacent code
-- Match existing style
-
-### 4. Goal-Driven Execution
-```
-1. [Step] → verify: [check]
-2. [Step] → verify: [check]
-```
-
-### 5. Durable & Organized Code
-- No disposable scripts
-- Reusable functions and modules
-- Strategic code placement
-
-### 6. Match Existing Patterns
-- Follow the code style already in use
-- Use existing utility functions
-- Don't introduce conflicting conventions
 
 ## Error Handling
 
