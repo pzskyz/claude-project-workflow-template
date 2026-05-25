@@ -17,13 +17,8 @@ $ARGUMENTS
 ### Bước 1: Xem thay đổi
 
 ```bash
-# Xem status
 git status --short
-
-# Xem danh sách files
 git diff --name-only
-
-# Xem chi tiết diff
 git diff
 ```
 
@@ -39,57 +34,24 @@ git diff
 
 ### Bước 3: Chọn verification level
 
-| Level | Khi nào          | Checks              |
-| ----- | ---------------- | ------------------- |
-| 0     | Docs/config only | Check formatting    |
-| 1     | Surgical fix     | Unit tests + lint   |
-| 2     | Feature change   | Tests + build       |
-| 3     | Cross-system     | Tests + build + E2E |
+| Level | Khi nào | Checks |
+|-------|---------|--------|
+| 0 | Docs/config only | Manual review |
+| 1 | Surgical fix | Targeted tests + lint/typecheck |
+| 2 | Feature change | Tests + build + lint/typecheck |
+| 3 | Cross-system | Tests + build + E2E |
 
 ### Bước 4: Chạy verification
 
-**Level 0:**
-```bash
-# Check formatting
-<!-- CUSTOMIZE: prettier, markdownlint, etc. -->
-```
+Đọc commands từ `CLAUDE.md` → `Project Commands`.
 
-**Level 1:**
-```bash
-# Run tests
-{{TEST_COMMAND}}
-
-# Run lint
-{{LINT_COMMAND}}
-```
-
-**Level 2:**
-```bash
-# Run tests
-{{TEST_COMMAND}}
-
-# Run build
-{{BUILD_COMMAND}}
-
-# Run lint
-{{LINT_COMMAND}}
-```
-
-**Level 3:**
-```bash
-# Run tests
-{{TEST_COMMAND}}
-
-# Run build
-{{BUILD_COMMAND}}
-
-# Run E2E
-{{E2E_COMMAND}}
-```
+- Không execute literal placeholders như `{{TEST_COMMAND}}`
+- Sử dụng commands từ CLAUDE.md
+- Nếu command không xác định được, inspect project files
 
 ### Bước 5: Report kết quả
 
-## Output: Verification Report
+## Output
 
 ```markdown
 ## Verification Report
@@ -102,37 +64,24 @@ git diff
 ### Verification Level
 [0/1/2/3]
 
-### Checks Run
+### Commands Run
+- [command] — [pass/fail/skipped]
 
-| Check | Command             | Status                |
-| ----- | ------------------- | --------------------- |
-| Tests | `{{TEST_COMMAND}}`  | ✅ Pass / ❌ Fail       |
-| Build | `{{BUILD_COMMAND}}` | ✅ Pass / ❌ Fail / N/A |
-| Lint  | `{{LINT_COMMAND}}`  | ✅ Pass / ❌ Fail / N/A |
-| E2E   | `{{E2E_COMMAND}}`   | ✅ Pass / ❌ Fail / N/A |
-
-### Results
-<!-- Paste test output, build output -->
+### Build / Quality Status
+- Tests: [pass/fail/skipped]
+- Build: [pass/fail/skipped]
+- Lint: [pass/fail/skipped]
+- E2E: [pass/fail/skipped]
 
 ### Issues Found
 - [none / list of issues]
-
-### Skipped Checks
-- [any skipped and why]
 
 ### Recommendation
 [Ready to merge / Needs fixes / Manual review required]
 ```
 
-## Khi nào skip checks
-
-- Không có E2E command → note và skip
-- Không có build step → skip
-- Changes là docs-only → skip tests
-
-## Lưu ý
+## Nguyên tắc
 
 - KHÔNG sửa code trong quá trình verify
 - Nếu thấy lỗi → báo cáo nhưng không tự fix
-- Nếu tests fail → mô tả rõ lỗi và suggest fix approach
-- Nếu unclear scope → hỏi người dùng
+- Nếu scope không rõ → hỏi người dùng

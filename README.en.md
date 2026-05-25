@@ -1,6 +1,6 @@
 # Claude Project Workflow Template
 
-Reusable starter kit for any Claude Code project.
+Reusable starter kit for any Claude Code project. Only `CLAUDE.md` needs customization; all other files copy as-is.
 
 ## Structure
 
@@ -9,19 +9,19 @@ claude-project-workflow-template/
 ├── README.md                 # Vietnamese setup guide
 ├── README.en.md              # English setup guide
 ├── CLAUDE.template.md        # Main template (copy to new projects)
-├── commands/                 # Slash commands (English only)
+├── commands/                 # Slash commands (English)
 │   ├── dev.analyze.md        # Analyze codebase (read-only)
-│   ├── dev.verify.md         # Run test/build/lint
-│   ├── dev.e2e.md            # E2E testing
-│   ├── dev.full-pipeline.md  # Complete workflow
-│   └── dev.finalize.md       # Summary & memory
+│   ├── dev.verify.md        # Run verification
+│   ├── dev.e2e.md           # E2E testing
+│   ├── dev.full-pipeline.md # Complete workflow
+│   └── dev.finalize.md       # Summary
 └── prompts/                  # Prompt templates
-    ├── vi/                   # Vietnamese prompts
+    ├── vi/                   # Vietnamese
     │   ├── bug-fix.md
     │   ├── new-feature.md
     │   ├── refactor.md
     │   └── verify-only.md
-    └── en/                   # English prompts
+    └── en/                   # English
         ├── bug-fix.md
         ├── new-feature.md
         ├── refactor.md
@@ -36,7 +36,7 @@ claude-project-workflow-template/
 # Create commands directory
 mkdir -p .claude/commands
 
-# Copy main template
+# Copy CLAUDE template
 cp claude-project-workflow-template/CLAUDE.template.md ./CLAUDE.md
 
 # Copy all commands
@@ -46,46 +46,37 @@ cp claude-project-workflow-template/commands/*.md .claude/commands/
 cp claude-project-workflow-template/prompts/en/*.md .claude/prompts/
 ```
 
-### 2. Customize for your project
+### 2. Only customize CLAUDE.md
 
-#### Step 1: Update CLAUDE.md
+Open `CLAUDE.md` and fill in your project information:
 
-Open `CLAUDE.md` and replace placeholders:
-
+#### Project Overview & Tech Stack
 ```markdown
-{{PROJECT_NAME}}         → Your project name
-{{FRAMEWORK}}            → Next.js, React, FastAPI, etc.
-{{TEST_COMMAND}}         → npm test, pytest, cargo test
-{{BUILD_COMMAND}}        → npm run build
-{{LINT_COMMAND}}         → npm run lint, ruff check .
-{{E2E_COMMAND}}          → npx playwright test, npm run e2e
+## Project Overview
+[Describe project]
+
+## Tech Stack
+- **Framework**: Next.js
+- **Language**: TypeScript
+...
 ```
 
-#### Step 2: Update dev.verify.md
+#### Project Commands (Source of truth)
+```markdown
+## Project Commands
 
-Open `.claude/commands/dev.verify.md` and replace commands in the `<!-- CUSTOMIZE: -->` section.
+| Purpose | Command | Notes |
+|---|---|---|
+| Setup | `npm install` | Install dependencies |
+| Test | `npm test` | Run test suite |
+| Build | `npm run build` | Production build |
+| Lint | `npm run lint` | Static linting |
+| E2E | `npx playwright test` | End-to-end tests |
+```
 
-Examples:
-- Next.js:
-  ```bash
-  npm run lint
-  npm run typecheck
-  npm test
-  npm run build
-  ```
-- Python:
-  ```bash
-  pytest
-  ruff check .
-  mypy .
-  ```
-- Monorepo:
-  ```bash
-  cd packages/backend && npm run test
-  cd packages/frontend && npm run test
-  ```
+**Important**: Commands in `CLAUDE.md` are the single source of truth. Other commands read from here.
 
-### 3. Test the workflow
+### 3. Test workflow
 
 ```bash
 # Verify Claude reads CLAUDE.md
@@ -94,6 +85,28 @@ Examples:
 # Or run full pipeline
 # Type: "/dev.full-pipeline"
 ```
+
+## Principles
+
+### Single Source of Truth
+
+```
+CLAUDE.md → Project Commands (source of truth)
+commands/*.md → Read from CLAUDE.md
+prompts/*.md → Task templates, no specific commands
+```
+
+### Command Resolution Rules
+
+1. Read `CLAUDE.md` first
+2. Use commands from `Project Commands` section
+3. Never execute literal placeholders like `{{TEST_COMMAND}}`
+4. If command is `UNKNOWN`, inspect project files:
+   - `package.json`
+   - `pyproject.toml`
+   - `Makefile`
+   - `README.md`
+5. If still unknown, ask the user
 
 ## Workflow
 
@@ -106,12 +119,12 @@ Examples:
 
 ## Verification Levels
 
-| Level | When             | Checks              |
-| ----- | ---------------- | ------------------- |
-| 0     | Docs/config only | Check formatting    |
-| 1     | Surgical fix     | Unit tests + lint   |
-| 2     | Feature change   | Tests + build       |
-| 3     | Cross-system     | Tests + build + E2E |
+| Level | When | Checks |
+|-------|------|--------|
+| 0 | Docs/config only | Manual review |
+| 1 | Surgical fix | Targeted tests + lint/typecheck |
+| 2 | Feature change | Tests + build + lint/typecheck |
+| 3 | Cross-system | Tests + build + E2E |
 
 ## Advanced Customization
 
@@ -142,10 +155,6 @@ description: Prompt description
 
 Prompt content...
 ```
-
-## Important Notes
-
-**Placeholder Safety Rule**: If a `{{PLACEHOLDER}}` is not replaced, DO NOT execute it. Inspect project files to find the correct command. If no command can be found, mark it as UNKNOWN and ask the user.
 
 ## Links
 

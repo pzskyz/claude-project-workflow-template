@@ -2,9 +2,7 @@
 description: Verify only - run verification for current changes
 ---
 
-# Verify Only - Verification Only
-
-## Environment
+# Verify Only
 
 Run verification for current changes only. DO NOT modify code unless user asks.
 
@@ -32,53 +30,26 @@ git diff
   - Cross-system?
 - [ ] Evaluate risk level
 
-### Step 3: Read commands from CLAUDE.md
-
-From `CLAUDE.md` → `Project Commands`:
-- Test command
-- Build command
-- Lint command
-- Typecheck command
-- E2E command
-
-### Step 4: Select verification level
+### Step 3: Select verification level
 
 | Level | When | Checks |
 |-------|------|--------|
-| 0 | Docs/config only | Check formatting |
-| 1 | Surgical fix | Targeted test + lint/typecheck |
+| 0 | Docs/config only | Manual review |
+| 1 | Surgical fix | Targeted tests + lint/typecheck |
 | 2 | Feature change | Tests + build + lint/typecheck |
 | 3 | Cross-system | Tests + build + E2E |
 
-### Step 5: Run verification
+### Step 4: Run verification
 
-**Level 0:**
-- Review changed files for formatting
+Read commands from `CLAUDE.md` → `Project Commands`.
 
-**Level 1:**
-```bash
-[TARGETED_TEST_COMMAND]  # from CLAUDE.md
-[LINT_COMMAND]          # from CLAUDE.md
-[TYPECHECK_COMMAND]     # from CLAUDE.md (if available)
-```
+- Never execute literal placeholders like `{{TEST_COMMAND}}`
+- Use commands from CLAUDE.md
+- If command is unknown, inspect project files
 
-**Level 2:**
-```bash
-[TEST_COMMAND]          # from CLAUDE.md
-[BUILD_COMMAND]         # from CLAUDE.md
-[LINT_COMMAND]          # from CLAUDE.md
-```
+### Step 5: Report results
 
-**Level 3:**
-```bash
-[TEST_COMMAND]          # from CLAUDE.md
-[BUILD_COMMAND]         # from CLAUDE.md
-[E2E_COMMAND]           # from CLAUDE.md
-```
-
-### Step 6: Report results
-
-## Output: Verification Report
+## Output
 
 ```markdown
 ## Verification Report
@@ -91,23 +62,17 @@ From `CLAUDE.md` → `Project Commands`:
 ### Verification Level
 [0/1/2/3]
 
-### Checks Run
+### Commands Run
+- [command] — [pass/fail/skipped]
 
-| Check | Command | Status |
-|-------|---------|--------|
-| Tests | [from CLAUDE.md] | ✅ Pass / ❌ Fail |
-| Build | [from CLAUDE.md] | ✅ Pass / ❌ Fail / N/A |
-| Lint | [from CLAUDE.md] | ✅ Pass / ❌ Fail / N/A |
-| E2E | [from CLAUDE.md] | ✅ Pass / ❌ Fail / N/A |
-
-### Results
-<!-- Paste test output, build output -->
+### Build / Quality Status
+- Tests: [pass/fail/skipped]
+- Build: [pass/fail/skipped]
+- Lint: [pass/fail/skipped]
+- E2E: [pass/fail/skipped]
 
 ### Issues Found
 - [none / list of issues]
-
-### Skipped Checks
-- [any skipped and why]
 
 ### Recommendation
 [Ready to merge / Needs fixes / Manual review required]
@@ -115,14 +80,6 @@ From `CLAUDE.md` → `Project Commands`:
 
 ## Rules
 
-- **Never execute literal placeholders** like `[TEST_COMMAND]`
-- Always read commands from `CLAUDE.md` first
-- If command is unknown, inspect project files or ask user
 - DO NOT modify code during verification
 - If issues found → report but don't fix
-
-## When to skip checks
-
-- No E2E command in CLAUDE.md → note and skip
-- No build step → skip
-- Changes are docs-only → skip tests
+- If scope unclear → ask user

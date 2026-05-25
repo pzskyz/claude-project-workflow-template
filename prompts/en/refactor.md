@@ -80,7 +80,7 @@ $ARGUMENTS
 
 ### Phase 5: Verify
 
-- [ ] Run all tests (from `CLAUDE.md` → `Project Commands`)
+- [ ] Run all tests from `CLAUDE.md` → `Project Commands`
 - [ ] Verify behavior unchanged
 - [ ] Run lint/build
 

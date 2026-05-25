@@ -6,12 +6,17 @@ description: Finalize - check diff, docs, save memory
 
 Complete development session with final checks.
 
+## Rules
+
+- Use the verification results from `/dev.verify`.
+- If verification has not been run yet, run `/dev.verify` first.
+- Do not re-run expensive checks unless necessary.
+
 ## Checklist
 
 ### 1. Diff Review
 
 ```bash
-# View all changes
 git status --short
 git diff --cached
 git diff
@@ -26,15 +31,9 @@ git diff
 
 ### 2. Test Coverage
 
-Read test command from `CLAUDE.md` → `Project Commands`:
-
-```bash
-# Run tests to confirm
-{{TEST_COMMAND}}
-```
+Confirm tests pass from verification results.
 
 **Check:**
-- [ ] All tests pass
 - [ ] New tests for new behavior
 - [ ] Existing tests not broken
 
@@ -46,22 +45,13 @@ Read test command from `CLAUDE.md` → `Project Commands`:
 - [ ] Migration docs if schema changed
 - [ ] API docs if endpoints changed
 
-### 4. Build Verification
+### 4. Build Status
 
-Read build command from `CLAUDE.md` → `Project Commands`:
-
-```bash
-# Build to confirm no issues
-{{BUILD_COMMAND}}
-```
-
-**Check:**
-- [ ] Build succeeds
-- [ ] No critical warnings
+Confirm build succeeded from verification results.
 
 ### 5. Memory Update
 
-Save insights to memory system if:
+Save insights to memory if:
 - Important architecture decisions
 - New patterns discovered
 - Gotchas or caveats
@@ -82,28 +72,17 @@ Save insights to memory system if:
 ### Verification Results
 | Check | Status |
 |-------|--------|
-| Tests | ✅ Pass |
-| Build | ✅ Pass |
-| Lint  | ✅ Pass |
-| E2E   | ✅ Pass / N/A |
+| Tests | ✅ Pass / ❌ Fail |
+| Build | ✅ Pass / ❌ Fail |
+| Lint | ✅ Pass / ❌ Fail / N/A |
+| E2E | ✅ Pass / ❌ Fail / N/A |
 
-### Key Decisions
-- [Decision 1]
-- [Decision 2]
-
-### Next Steps (if any)
-- [Action 1]
-- [Action 2]
+### Risks / Skipped Checks
+- [any concerns or skipped checks]
 
 ### Recommendation
-[Ready to merge / Needs manual review / Blocked]
+[Ready to merge | Needs manual review | Blocked]
 ```
-
-## Rules
-
-- **Never execute literal placeholders** like `{{TEST_COMMAND}}`
-- Always read commands from `CLAUDE.md` first
-- If command is unknown, inspect project files or ask user
 
 ## When Manual Review is Needed
 

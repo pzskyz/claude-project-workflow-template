@@ -1,6 +1,6 @@
 # Claude Project Workflow Template
 
-Bộ template dùng lại cho mọi project Claude Code.
+Bộ template dùng lại cho mọi project Claude Code. Chỉ cần customize `CLAUDE.md`, các file khác copy nguyên.
 
 ## Cấu trúc
 
@@ -11,16 +11,16 @@ claude-project-workflow-template/
 ├── CLAUDE.template.md        # Template chính (copy sang project mới)
 ├── commands/                 # Slash commands (tiếng Anh)
 │   ├── dev.analyze.md        # Phân tích codebase (read-only)
-│   ├── dev.verify.md        # Chạy test/build/lint
+│   ├── dev.verify.md        # Chạy verification
 │   ├── dev.e2e.md           # E2E testing
 │   ├── dev.full-pipeline.md # Toàn bộ workflow
 │   └── dev.finalize.md      # Tổng kết
 └── prompts/                  # Prompt templates
     ├── vi/                   # Tiếng Việt
-    │   ├── bug-fix.md       # Sửa lỗi
-    │   ├── new-feature.md   # Phát triển tính năng mới
-    │   ├── refactor.md      # Tái cấu trúc
-    │   └── verify-only.md   # Chỉ xác minh
+    │   ├── bug-fix.md
+    │   ├── new-feature.md
+    │   ├── refactor.md
+    │   └── verify-only.md
     └── en/                   # English
         ├── bug-fix.md
         ├── new-feature.md
@@ -46,45 +46,35 @@ cp claude-project-workflow-template/commands/*.md .claude/commands/
 cp claude-project-workflow-template/prompts/en/*.md .claude/prompts/
 ```
 
-### 2. Customize cho project của bạn
+### 2. Chỉ cần customize CLAUDE.md
 
-#### Bước 1: Cập nhật CLAUDE.md
+Mở `CLAUDE.md` và điền thông tin project của bạn:
 
-Mở `CLAUDE.md` và thay thế các placeholder:
-
+#### Project Overview & Tech Stack
 ```markdown
-{{PROJECT_NAME}}         → Tên project của bạn
-{{FRAMEWORK}}            → Next.js, React, FastAPI, v.v.
-{{TEST_COMMAND}}         → npm test, pytest, cargo test
-{{BUILD_COMMAND}}        → npm run build
-{{LINT_COMMAND}}         → npm run lint, ruff check .
-{{E2E_COMMAND}}          → npx playwright test, npm run e2e
+## Project Overview
+[Mo ta project]
+
+## Tech Stack
+- **Framework**: Next.js
+- **Language**: TypeScript
+...
 ```
 
-#### Bước 2: Cập nhật dev.verify.md
+#### Project Commands (Source of truth)
+```markdown
+## Project Commands
 
-Mở `.claude/commands/dev.verify.md` và thay thế commands trong phần `<!-- CUSTOMIZE: -->`.
-
-Ví dụ Next.js:
-```bash
-npm run lint
-npm run typecheck
-npm run test
-npm run build
+| Purpose | Command | Notes |
+|---|---|---|
+| Setup | `npm install` | Install dependencies |
+| Test | `npm test` | Run test suite |
+| Build | `npm run build` | Production build |
+| Lint | `npm run lint` | Static linting |
+| E2E | `npx playwright test` | End-to-end tests |
 ```
 
-Ví dụ Python:
-```bash
-pytest
-ruff check .
-mypy .
-```
-
-Ví dụ Monorepo:
-```bash
-cd packages/backend && npm run test
-cd packages/frontend && npm run test
-```
+**Quan trọng**: Commands trong `CLAUDE.md` là source of truth duy nhất. Các commands khác sẽ đọc từ đây.
 
 ### 3. Test workflow
 
@@ -95,6 +85,28 @@ cd packages/frontend && npm run test
 # Hoặc chạy full pipeline
 # Gõ: "/dev.full-pipeline"
 ```
+
+## Nguyên tắc
+
+### Single Source of Truth
+
+```
+CLAUDE.md → Project Commands (source of truth)
+commands/*.md → Đọc từ CLAUDE.md
+prompts/*.md → Mẫu giao việc, không chứa command
+```
+
+### Command Resolution Rules
+
+1. Đọc `CLAUDE.md` trước
+2. Sử dụng commands từ `Project Commands` section
+3. Không execute literal placeholders như `{{TEST_COMMAND}}`
+4. Nếu command là `UNKNOWN`, inspect project files:
+   - `package.json`
+   - `pyproject.toml`
+   - `Makefile`
+   - `README.md`
+5. Nếu vẫn không tìm được, hỏi user
 
 ## Quy trình làm việc
 
@@ -107,12 +119,12 @@ cd packages/frontend && npm run test
 
 ## Verification Levels
 
-| Level | Khi nào          | Check gì            |
-| ----- | ---------------- | ------------------- |
-| 0     | Docs/config only | Check formatting    |
-| 1     | Surgical fix     | Unit tests + lint   |
-| 2     | Feature change   | Tests + build       |
-| 3     | Cross-system     | Tests + build + E2E |
+| Level | Khi nào | Checks |
+|-------|---------|--------|
+| 0 | Docs/config only | Manual review |
+| 1 | Surgical fix | Targeted tests + lint/typecheck |
+| 2 | Feature change | Tests + build + lint/typecheck |
+| 3 | Cross-system | Tests + build + E2E |
 
 ## Tùy chỉnh nâng cao
 

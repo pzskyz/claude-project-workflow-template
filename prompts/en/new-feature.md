@@ -47,14 +47,14 @@ $ARGUMENTS
 
 - [ ] Read identified files
 - [ ] Implement according to chosen architecture
-- [ ] Write tests (read test command from `CLAUDE.md` → `Project Commands`)
-- [ ] Run verification pipeline
+- [ ] Write tests
+- [ ] Run verification pipeline using commands from `CLAUDE.md` → `Project Commands`
 
 ### Phase 6: Verify
 
-- [ ] Run tests (from `CLAUDE.md`)
-- [ ] Run build (from `CLAUDE.md`)
-- [ ] Run lint/typecheck (from `CLAUDE.md`)
+- [ ] Run tests from `CLAUDE.md`
+- [ ] Run build from `CLAUDE.md`
+- [ ] Run lint/typecheck from `CLAUDE.md`
 - [ ] Generate verification report
 
 ## Final Output
@@ -70,7 +70,7 @@ $ARGUMENTS
 - [file 2]
 
 ### Tests run
-[test command from CLAUDE.md]
+[from CLAUDE.md → Project Commands]
 
 ### Build status
 [pass/fail]

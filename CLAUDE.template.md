@@ -17,63 +17,38 @@
 
 ## Project Commands
 
-Use these commands as the source of truth. Commands in `.claude/commands/` read from this section.
+This section is the **source of truth** for all project-specific commands.
 
-### Setup
+If a command is not available, write `UNKNOWN` and explain why. Do not invent commands.
 
-```bash
-{{INSTALL_COMMAND}}
-```
+| Purpose       | Command                     | Notes                             |
+| ------------- | --------------------------- | --------------------------------- |
+| Setup         | `{{SETUP_COMMAND}}`         | Install dependencies              |
+| Dev server    | `{{DEV_COMMAND}}`           | Start local development server    |
+| Test          | `{{TEST_COMMAND}}`          | Run normal test suite             |
+| Targeted test | `{{TARGETED_TEST_COMMAND}}` | Run one test file or pattern      |
+| Build         | `{{BUILD_COMMAND}}`         | Production build or compile check |
+| Lint          | `{{LINT_COMMAND}}`          | Static linting                    |
+| Typecheck     | `{{TYPECHECK_COMMAND}}`     | Type checking, if applicable      |
+| Format check  | `{{FORMAT_CHECK_COMMAND}}`  | Formatting check, if applicable   |
+| E2E           | `{{E2E_COMMAND}}`           | End-to-end tests, if available    |
+| E2E report    | `{{E2E_REPORT_COMMAND}}`    | Show E2E report, if available     |
 
-### Development Server
+## Command Resolution Rules
 
-```bash
-{{START_COMMAND}}
-```
+When executing slash commands:
 
-### Test
-
-```bash
-{{TEST_COMMAND}}
-```
-
-### Targeted Test
-
-```bash
-{{TARGETED_TEST_COMMAND}}
-```
-<!-- Example: npm test -- --testPathPattern=auth -->
-
-### Build
-
-```bash
-{{BUILD_COMMAND}}
-```
-
-### Lint
-
-```bash
-{{LINT_COMMAND}}
-```
-
-### Typecheck
-
-```bash
-{{TYPECHECK_COMMAND}}
-```
-
-### E2E
-
-```bash
-{{E2E_COMMAND}}
-```
-
-### E2E Report
-
-```bash
-{{E2E_REPORT_COMMAND}}
-```
-<!-- Example: npx playwright show-report -->
+1. Read `CLAUDE.md` first.
+2. Use commands from `Project Commands`.
+3. Never execute literal placeholders like `{{TEST_COMMAND}}`.
+4. If a command is `UNKNOWN`, inspect project files:
+   - `package.json`
+   - `pyproject.toml`
+   - `Makefile`
+   - `README.md`
+   - CI config (`.github/workflows/*.yml`)
+   - Docker config
+5. If still unknown, ask the user before running that check.
 
 ## Team Review Protocol
 
@@ -109,12 +84,12 @@ Every source-code change must end with a verification report.
 
 ### Verification Levels
 
-| Level | Use Case                | Required Checks                                                    |
-| ----- | ----------------------- | ------------------------------------------------------------------ |
-| 0     | Docs/config only        | Check formatting manually, no tests required                       |
-| 1     | Surgical code change    | Run targeted unit tests, run lint/typecheck                        |
-| 2     | Feature/behavior change | Add/update tests, run relevant unit/integration tests, run build   |
-| 3     | Cross-system/user flow  | Unit/integration tests, build verification, E2E tests, update docs |
+| Level | Use Case                | Required Checks                 |
+| ----- | ----------------------- | ------------------------------- |
+| 0     | Docs/config only        | Manual review or format check   |
+| 1     | Surgical code change    | Targeted tests + lint/typecheck |
+| 2     | Feature/behavior change | Tests + build + lint/typecheck  |
+| 3     | Cross-system/user flow  | Tests + build + E2E             |
 
 ### Final Verification Report Format
 

@@ -4,72 +4,47 @@ description: Run E2E tests or manual user flow verification
 
 # Dev E2E
 
-Run end-to-end tests or verify manual user flows.
+Run E2E tests using the E2E command defined in `CLAUDE.md`.
 
-## When to use
+## Rules
+
+- Read `CLAUDE.md` → `Project Commands` first.
+- Use the project-defined E2E command.
+- If E2E command is `UNKNOWN`, inspect project files for Playwright, Cypress, pytest e2e, or other E2E setup.
+- If no E2E framework exists, perform API/manual user-flow verification and report that E2E is unavailable.
+
+## When to Use
 
 - **Level 3 verification**: Cross-system, user-facing changes
 - **Critical paths**: Login, checkout, payment, auth flows
 - **Before release**: Important feature needs full flow test
 - **Regression**: Ensure changes don't break existing flows
 
-## Process
+## Workflow
 
-### Step 1: Read E2E command from CLAUDE.md
+1. Identify the user-facing flow affected by the change.
+2. Read the E2E command from `CLAUDE.md`.
+3. Discover available E2E tests before running specific files.
+4. Run the smallest relevant E2E suite.
+5. If tests fail, inspect logs, screenshots, traces, or reports.
+6. Produce E2E report.
 
-From `CLAUDE.md` → `Project Commands` → E2E section:
-```bash
-{{E2E_COMMAND}}
-```
+## Finding E2E Command
 
-If not defined, inspect project files:
-- `package.json` (scripts with "e2e", "test:e2e")
-- `playwright.config.ts`, `cypress.config.ts`
-- `README.md` (e2e instructions)
+If `CLAUDE.md` → `Project Commands` has E2E marked as `UNKNOWN`:
 
-### Step 2: Run E2E tests
+1. Check for E2E frameworks:
+   - Playwright: `playwright.config.ts`, `playwright.config.js`
+   - Cypress: `cypress.config.ts`, `cypress.config.js`
+   - Jest: `tests/e2e/`, `__e2e__/`
+   - pytest: `tests/e2e/`, `e2e/`
 
-```bash
-# Run all E2E tests
-{{E2E_COMMAND}}
+2. Look in package.json scripts:
+   ```bash
+   grep -E "e2e|playwright|cypress" package.json
+   ```
 
-# Run specific test file (if applicable)
-# {{E2E_COMMAND}} --spec path/to/test.spec.ts
-```
-
-### Step 3: View E2E report (if available)
-
-```bash
-# Show E2E report if command exists
-{{E2E_REPORT_COMMAND}}
-```
-
-## Common E2E Frameworks
-
-### Playwright
-```bash
-npx playwright test
-npx playwright test --ui           # With UI
-npx playwright test --headed       # See browser
-npx playwright test --trace on    # With trace
-```
-
-### Cypress
-```bash
-npm run cypress:run
-npm run cypress:open              # Open UI
-```
-
-### Jest + Supertest (API)
-```bash
-npm run test:e2e
-npx jest tests/e2e
-```
-
-### pytest (Python)
-```bash
-pytest tests/e2e/ -v
-```
+3. Check README for E2E instructions.
 
 ## Manual Verification
 
@@ -95,17 +70,16 @@ curl /api/users/999  # expect 404
 - [ ] Loading states
 - [ ] Error states
 
-## Output: E2E Report
+## E2E Report
 
 ```markdown
 ## E2E Verification Report
 
 - **Scope**: [description of flow tested]
-- **Framework**: [Playwright/Cypress/manual]
+- **Framework**: [Playwright/Cypress/manual/None]
 - **Tests run**: [count]
 - **Passed**: [count]
 - **Failed**: [count]
-- **Duration**: [time]
 
 ### Results
 <!-- Test output or curl results -->
@@ -114,19 +88,12 @@ curl /api/users/999  # expect 404
 - [list any failures]
 
 ### Recommendation
-- [ready / needs fixes / manual intervention required]
+[ready / needs fixes / manual intervention required]
 ```
 
-## Rules
+## When E2E is Unavailable
 
-- **Never execute literal placeholders** like `{{E2E_COMMAND}}`
-- Always read from `CLAUDE.md` first
-- If E2E command is unknown, inspect project files
-- If still unknown, mark as `UNKNOWN` and ask user
-- Note if no E2E framework exists (skip gracefully)
-
-## When to skip E2E
-
-- No E2E framework → note and skip
-- Backend-only change that doesn't affect user flows → skip
-- Time constraints → note and skip with reason
+Report clearly:
+- No E2E framework detected
+- Which files were checked
+- Suggest adding E2E tests if Level 3 verification is needed

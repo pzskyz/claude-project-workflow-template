@@ -24,7 +24,7 @@ $ARGUMENTS
 
 ### Giai đoạn 2: Khảo sát code
 
-- [ ] Đọc CLAUDE.md để hiểu cấu trúc dự án
+- [ ] Đọc `CLAUDE.md` để hiểu cấu trúc dự án
 - [ ] Tìm các tính năng tương tự
 - [ ] Trace qua code hiện tại
 - [ ] Xác định 5-10 file quan trọng cần đọc
@@ -48,13 +48,13 @@ $ARGUMENTS
 - [ ] Đọc các file đã xác định
 - [ ] Implement theo architecture đã chọn
 - [ ] Viết tests
-- [ ] Chạy verification pipeline
+- [ ] Chạy verification pipeline sử dụng commands từ `CLAUDE.md` → `Project Commands`
 
 ### Giai đoạn 6: Xác minh
 
-- [ ] Chạy tests
-- [ ] Chạy build
-- [ ] Chạy lint/typecheck
+- [ ] Chạy tests từ `CLAUDE.md`
+- [ ] Chạy build từ `CLAUDE.md`
+- [ ] Chạy lint/typecheck từ `CLAUDE.md`
 - [ ] Generate verification report
 
 ## Output cuối cùng
@@ -70,7 +70,7 @@ $ARGUMENTS
 - [file 2]
 
 ### Tests run
-- [test command]
+[từ CLAUDE.md → Project Commands]
 
 ### Build status
 [pass/fail]
@@ -88,3 +88,4 @@ $ARGUMENTS
 - Không "improve" code không liên quan
 - Match existing patterns trong codebase
 - Nếu ambiguous → hỏi người dùng trước khi đoán
+- Sử dụng commands từ `CLAUDE.md` → `Project Commands` section

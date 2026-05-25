@@ -26,12 +26,8 @@ $ARGUMENTS
 
 ### Giai đoạn 2: Hiểu current behavior
 
-- [ ] Đọc CLAUDE.md
-- [ ] Trace current flow:
-  ```bash
-  # Tìm files liên quan
-  grep -rn "TARGET" --include="*.ts" --include="*.py"
-  ```
+- [ ] Đọc `CLAUDE.md` để hiểu project context
+- [ ] Trace current flow
 - [ ] Xác định public API contract cần giữ:
   - Function signatures
   - Return values
@@ -45,12 +41,12 @@ $ARGUMENTS
   ## Refactor Analysis
 
   ### Target
-  [File/function/module cần refactor]
+  [File/function/module can refactor]
 
   ### Current State
-  - LOC: [số dòng]
-  - Complexity: [mô tả]
-  - Issues: [danh sách vấn đề]
+  - LOC: [so dong]
+  - Complexity: [mo ta]
+  - Issues: [danh sach van de]
 
   ### Behavior to Preserve
   - [API 1]
@@ -58,11 +54,11 @@ $ARGUMENTS
   - [Edge cases]
 
   ### Proposed Changes
-  [Mô tả approach]
+  [Mo ta approach]
 
   ### Regression Test Plan
-  - Test 1: [mô tả]
-  - Test 2: [mô tả]
+  - Test 1: [mo ta]
+  - Test 2: [mo ta]
 
   ### Risk Level
   [Low/Medium/High]
@@ -84,26 +80,13 @@ $ARGUMENTS
 
 ### Giai đoạn 5: Verify
 
-- [ ] Chạy tất cả tests:
-  ```bash
-  {{TEST_COMMAND}}
-  ```
-- [ ] Verify behavior không đổi:
-  ```bash
-  # Manual test các edge cases
-  ```
-- [ ] Chạy lint/build:
-  ```bash
-  {{LINT_COMMAND}}
-  {{BUILD_COMMAND}}
-  ```
+- [ ] Chạy tất cả tests từ `CLAUDE.md` → `Project Commands`
+- [ ] Verify behavior không đổi
+- [ ] Chạy lint/build
 
 ### Giai đoạn 6: Finalize
 
-- [ ] Review diff:
-  ```bash
-  git diff
-  ```
+- [ ] Review diff
 - [ ] Đảm bảo:
   - Public API không đổi
   - Tests vẫn pass
@@ -119,7 +102,7 @@ $ARGUMENTS
 [File/function/module]
 
 ### Changes Made
-[Mô tả refactor]
+[Mo ta refactor]
 
 ### Behavior Preserved
 - [API 1]: ✅
@@ -133,11 +116,11 @@ $ARGUMENTS
 - New tests added: [count]
 
 ### Verification
-| Check                | Status |
-| -------------------- | ------ |
-| Public API unchanged | ✅      |
-| Tests pass           | ✅      |
-| Build pass           | ✅      |
+| Check | Status |
+|-------|--------|
+| Public API unchanged | ✅ |
+| Tests pass | ✅ |
+| Build pass | ✅ |
 
 ### Recommendation
 [Ready to merge]
@@ -170,3 +153,4 @@ $ARGUMENTS
 - **Secondary goal**: cải thiện code quality
 - Nếu hai goals xung đột → ưu tiên giữ nguyên behavior
 - Nếu refactor phức tạp → tách thành nhiều PRs nhỏ
+- Sử dụng commands từ `CLAUDE.md` → `Project Commands` section

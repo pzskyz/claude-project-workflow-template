@@ -1,90 +1,59 @@
 ---
-description: Run verification - test, build, lint based on change scope
+description: Run repository verification based on change scope
 ---
 
 # Dev Verify
 
-Run the verification pipeline appropriate for the scope and risk of the current changes.
+Run repository verification using the commands defined in `CLAUDE.md`.
 
-## Principles
+## Rules
 
-- Verification level must match change scope
-- Don't run too many or too few checks
-- Report results clearly
-- Use commands from `CLAUDE.md` → `Project Commands` section
+- Read `CLAUDE.md` first.
+- Use `CLAUDE.md` → `Project Commands` as the source of truth.
+- Do not run literal placeholders such as `{{TEST_COMMAND}}`.
+- If a command is missing or marked `UNKNOWN`, inspect project files to infer it.
+- If still unknown, report it as skipped and ask the user.
 
-## Process
+## Workflow
 
-### Step 1: Read project commands
-
-From `CLAUDE.md`, extract the `Project Commands` section:
-- Test command
-- Build command
-- Lint command
-- Typecheck command
-- E2E command
-
-### Step 2: Identify changes
+### Step 1: Inspect changes
 
 ```bash
 git status --short
 git diff --name-only
 ```
 
-### Step 3: Determine verification level
+### Step 2: Classify verification level
 
-| Level | When | Required Checks |
-|-------|------|-----------------|
-| 0 | Docs/config only | Check formatting |
-| 1 | Single bug fix, small function | Targeted test + lint/typecheck |
-| 2 | Feature, behavior change | Tests + build + lint/typecheck |
-| 3 | Cross-system, user-facing | Tests + build + E2E |
+| Level | When                          | Required checks                 |
+| ----- | ----------------------------- | ------------------------------- |
+| 0     | Docs/config only              | Manual review or format check   |
+| 1     | Surgical code change          | Targeted tests + lint/typecheck |
+| 2     | Feature/behavior change       | Tests + build + lint/typecheck  |
+| 3     | Cross-system/user-facing flow | Tests + build + E2E             |
 
-### Step 4: Run checks by level
+### Step 3: Run checks
 
-#### Level 0: Docs/Config only
+Use commands from `CLAUDE.md` → `Project Commands`.
 
-- Review changed files for formatting
-- No command execution required
+**Level 0:**
+- Run format check if available
+- Otherwise manually review changed docs/config
 
-#### Level 1: Surgical code change
+**Level 1:**
+- Run targeted test if available
+- Run lint/typecheck if available
 
-```bash
-# Run targeted tests (use targeted test command from CLAUDE.md)
-{{TARGETED_TEST_COMMAND}}
+**Level 2:**
+- Run test
+- Run build
+- Run lint/typecheck if available
 
-# Run linting
-{{LINT_COMMAND}}
-
-# Run typecheck if available
-{{TYPECHECK_COMMAND}}
-```
-
-#### Level 2: Feature/behavior change
-
-```bash
-# Run tests
-{{TEST_COMMAND}}
-
-# Run build
-{{BUILD_COMMAND}}
-
-# Run linting
-{{LINT_COMMAND}}
-```
-
-#### Level 3: Cross-system flow
-
-```bash
-# Run tests
-{{TEST_COMMAND}}
-
-# Run build
-{{BUILD_COMMAND}}
-
-# Run E2E
-{{E2E_COMMAND}}
-```
+**Level 3:**
+- Run test
+- Run build
+- Run E2E
+- Inspect E2E report if failures occur
 
 ## Auto-detect scope
 
@@ -112,22 +81,6 @@ if echo "$CHANGED_FILES" | grep -qE "(auth|route|api|db)"; then
 fi
 ```
 
-## Output: Verification Report
-
-```markdown
-## Verification Report
-
-- **Level**: [0/1/2/3]
-- **What changed**: [description]
-- **Files changed**: [list]
-- **Tests run**: [commands]
-- **Build status**: [pass/fail]
-- **Lint status**: [pass/fail]
-- **E2E status**: [pass/fail or N/A]
-- **Risks/skipped**: [any concerns]
-- **Recommendation**: [ready/needs-fixes]
-```
-
 ## Finding Commands
 
 If `CLAUDE.md` does not have the required command:
@@ -153,9 +106,33 @@ If `CLAUDE.md` does not have the required command:
 - Tests already run (CI) → note and skip
 - Urgent hotfix → note and proceed
 
-## Rules
+## Verification Report
 
-- **Never execute literal placeholders** like `{{TEST_COMMAND}}`
-- Always read commands from `CLAUDE.md` first
-- If required command is missing, ask the user
-- Prefer explicit commands over heuristics
+```markdown
+## Verification Report
+
+### Level
+[0/1/2/3]
+
+### What Changed
+[summary]
+
+### Files Changed
+- [file]
+
+### Commands Run
+- [command] — [pass/fail/skipped]
+
+### Build / Quality Status
+- Tests: [pass/fail/skipped]
+- Build: [pass/fail/skipped]
+- Lint: [pass/fail/skipped]
+- Typecheck: [pass/fail/skipped]
+- E2E: [pass/fail/skipped]
+
+### Risks / Skipped Checks
+- [reason]
+
+### Recommendation
+[Ready to merge | Needs fixes | Blocked]
+```

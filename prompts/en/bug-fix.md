@@ -80,7 +80,7 @@ $ARGUMENTS
 ### Phase 5: Verify
 
 - [ ] Reproduce bug → confirm fixed
-- [ ] Run tests (from `CLAUDE.md` → `Project Commands`)
+- [ ] Run tests from `CLAUDE.md` → `Project Commands`
 - [ ] Run lint/build if needed
 
 ### Phase 6: Finalize
