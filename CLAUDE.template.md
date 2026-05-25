@@ -32,7 +32,7 @@ If a command is not available, write `UNKNOWN` and explain why. Do not invent co
 | Typecheck     | `{{TYPECHECK_COMMAND}}`     | Type checking, if applicable      |
 | Format check  | `{{FORMAT_CHECK_COMMAND}}`  | Formatting check, if applicable   |
 | E2E           | `{{E2E_COMMAND}}`           | End-to-end tests, if available    |
-| E2E report    | `{{E2E_REPORT_COMMAND}}`     | Show E2E report, if available     |
+| E2E report    | `{{E2E_REPORT_COMMAND}}`    | Show E2E report, if available     |
 
 ## Command Resolution Rules
 
@@ -103,6 +103,22 @@ For multi-step tasks, state a brief plan:
 2. [Step] → verify: [check]
 3. [Step] → verify: [check]
 ```
+
+## Additional Coding Guidelines
+
+### Durable & Organized Code
+
+- No disposable scripts or one-off solutions.
+- Reusable functions and modules over duplicated logic.
+- Strategic code placement: related code together, separated concerns.
+- If you find yourself copying code, extract to a shared utility.
+
+### Match Existing Patterns
+
+- Follow the code style already in use (indentation, naming, imports).
+- Use existing utility functions instead of creating new ones.
+- Don't introduce conflicting conventions.
+- Match the project's testing patterns.
 
 ## Team Review Protocol
 
